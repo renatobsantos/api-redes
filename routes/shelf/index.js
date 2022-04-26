@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const stockTable = require("../stock/table");
 const shelfTable = require("./table");
+const transferTable = require("../transfers/table");
 
 // Update
 router.put("/withdrawal", async (req, res) => {
@@ -18,7 +19,6 @@ router.put("/withdrawal", async (req, res) => {
 			amount: package.amount - amount,
 		};
 		let shelfProduct = await shelfTable.find(id);
-		console.log(shelfProduct);
 		if (!!shelfProduct) {
 			shelfProduct = {
 				...shelfProduct,
@@ -37,6 +37,16 @@ router.put("/withdrawal", async (req, res) => {
 			res.status(422).json({ message: "Pacote não encontrado!" });
 			return;
 		}
+
+		delete package.id;
+		await transferTable.create({
+			...package,
+			code: id,
+			amount: amount,
+			type: 1,
+			interactionDate: new Date().toISOString(),
+			interactionMillis: new Date().getTime(),
+		});
 		res.status(200).json({ message: "Produto atualizado!" });
 	} catch (error) {
 		res.status(500).json({ error: error });
@@ -58,6 +68,16 @@ router.put("/purchase", async (req, res) => {
 			amount: delta,
 		};
 		await shelfTable.update(id, package);
+
+		delete package.id;
+		await transferTable.create({
+			...package,
+			code: id,
+			amount: amount,
+			type: 2,
+			interactionDate: new Date().toISOString(),
+			interactionMillis: new Date().getTime(),
+		});
 		res.status(200).json({ message: "Atualizado com sucesso" });
 	} catch (error) {
 		res.status(500).json({ message: error });
