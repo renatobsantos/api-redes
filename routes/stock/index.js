@@ -1,9 +1,11 @@
 const router = require("express").Router();
+const { sendMessage } = require("../../services/rabbit");
 const stockTable = require("./table");
 
 router.post("/", async (req, res) => {
 	const { name, id, batch, manufacturingDate, expiringDate, origin, amount } =
 		req.body;
+	sendMessage(req.baseUrl, "POST", req.body, req.params, req.query);
 
 	try {
 		stockTable.create(req.body);
@@ -15,9 +17,9 @@ router.post("/", async (req, res) => {
 
 // Read
 router.get("/", async (req, res) => {
+	sendMessage(req.baseUrl, "GET", req.body, req.params, req.query);
 	try {
 		const package = await stockTable.list();
-
 		res.status(200).json(package);
 	} catch (error) {
 		res.status(500).json({ error: error });
@@ -27,6 +29,7 @@ router.get("/", async (req, res) => {
 // Read
 router.get("/:id", async (req, res) => {
 	const id = req.params.id;
+	sendMessage(req.baseUrl, "GET", req.body, req.params, req.query);
 
 	try {
 		const package = await stockTable.find(id);
@@ -48,7 +51,7 @@ router.put("/:id", async (req, res) => {
 	const { entry } = req.query;
 	const { name, batch, manufacturingDate, expiringDate, origin, amount } =
 		req.body;
-
+	sendMessage(req.baseUrl, "PUT", req.body, req.params, req.query);
 	try {
 		let updatedPackage;
 		if (!!entry) {
@@ -73,6 +76,7 @@ router.put("/:id", async (req, res) => {
 // Delete
 router.delete("/:id", async (req, res) => {
 	const id = req.params.id;
+	sendMessage(req.baseUrl, "DELETE", req.body, req.params, req.query);
 
 	try {
 		const package = await stockTable.remove(id);

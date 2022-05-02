@@ -2,11 +2,12 @@ const router = require("express").Router();
 const stockTable = require("../stock/table");
 const shelfTable = require("./table");
 const transferTable = require("../transfers/table");
+const { sendMessage } = require("../../services/rabbit");
 
 // Update
 router.put("/withdrawal", async (req, res) => {
 	const { id, amount } = req.body;
-
+	sendMessage(req.baseUrl, "PUT", req.body, req.params, req.query);
 	try {
 		let package = await stockTable.find(id);
 		const delta = package.amount - amount;
@@ -55,7 +56,7 @@ router.put("/withdrawal", async (req, res) => {
 
 router.put("/purchase", async (req, res) => {
 	const { id, amount } = req.body;
-
+	sendMessage(req.baseUrl, "PUT", req.body, req.params, req.query);
 	try {
 		let package = await shelfTable.find(id);
 		const delta = package.amount - amount;

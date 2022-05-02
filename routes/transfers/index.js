@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const transferTable = require("./table");
+const { sendMessage } = require("../../services/rabbit");
 
 router.get("/", async (req, res) => {
 	try {
 		const { type, initialDate, endDate } = req.query;
+		sendMessage(req.baseUrl, "GET", req.body, req.params, req.query);
 		let transfers;
 		if (type !== undefined && initialDate === undefined) {
 			transfers = await transferTable.findType(type);
@@ -25,6 +27,7 @@ router.get("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
 	const id = req.params.id;
+	sendMessage(req.baseUrl, "DELETE", req.body, req.params, req.query);
 
 	try {
 		const package = await transferTable.remove(id);
