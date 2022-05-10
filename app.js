@@ -22,14 +22,14 @@ const credentials = {
 	db: "cluster0.8bf5t",
 };
 
-mongoose
-	.connect(
-		`mongodb+srv://${credentials.user}:${credentials.password}@${credentials.db}.mongodb.net/RCA?retryWrites=true&w=majority`,
-	)
-	.then(() => {
-		console.log("Conectou ao banco!");
-		app.listen(3000);
-	})
-	.catch((err) => console.log(err));
+app.listen(4000);
+// mongoose
+// 	.connect(
+// 		`mongodb+srv://${credentials.user}:${credentials.password}@${credentials.db}.mongodb.net/RCA?retryWrites=true&w=majority`,
+// 	)
+// 	.then(() => {
+// 		console.log("Conectou ao banco!");
+// 	})
+// 	.catch((err) => console.log(err));
 
 //s8q66edB33B1AGIi
