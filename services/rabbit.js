@@ -24,9 +24,12 @@ const sendMessage = (endpoint, method, body, params, query, res) => {
 				channel.consume(queue, (msg) => {
 					if (corrId === msg.properties.correlationId) {
 						const response = JSON.parse(msg.content);
-						console.log("RESPONSE", response);
+						console.log(response);
 						res.status(response.code).json(response.body);
 						resolve(response);
+						setTimeout(() => {
+							connection.close();
+						}, 500);
 					}
 				});
 				const jsonMessage = JSON.stringify(msgContent);
