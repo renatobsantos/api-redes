@@ -12,6 +12,30 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use((req, res, prox) => {
+	let requestedType = req.header("Accept");
+
+	if (requestedType === "*/*") {
+		requestedType = "application/json";
+	}
+
+	res.setHeader("Content-Type", "application/json");
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader(
+		"Access-Control-Allow-Methods",
+		"GET, POST, OPTIONS, PUT, PATCH, DELETE",
+	);
+	res.setHeader("Access-Control-Allow-Credentials", true);
+	res.setHeader("Access-Control-Allow-Headers", [
+		"Origin",
+		"Content-Type",
+		"X-Auth-Token",
+	]);
+
+	prox();
+});
+
 app.use("/stock", productsRoutes);
 app.use("/shelf", shelfRoutes);
 app.use("/transfer", transferRoutes);
