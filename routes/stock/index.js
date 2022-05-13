@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const { sendMessage } = require("../../services/rabbit");
-const stockTable = require("./table");
 
 router.post("/", async (req, res) => {
 	const { name, id, batch, manufacturingDate, expiringDate, origin, amount } =

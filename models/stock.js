@@ -11,6 +11,10 @@ const cols = {
 		type: Sequelize.STRING,
 		allowNull: false,
 	},
+	code: {
+		type: Sequelize.STRING,
+		allowNull: false,
+	},
 	batch: {
 		type: Sequelize.STRING,
 		allowNull: false,

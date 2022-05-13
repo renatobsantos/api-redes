@@ -1,17 +1,11 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const productsRoutes = require("./routes/stock");
 const shelfRoutes = require("./routes/shelf");
 const transferRoutes = require("./routes/transfers");
 const app = express();
+const bodyParser = require("body-parser");
 
-app.use(
-	express.urlencoded({
-		extended: true,
-	}),
-);
-
-app.use(express.json());
+app.use(bodyParser.json());
 
 app.use((req, res, prox) => {
 	let requestedType = req.header("Accept");
@@ -40,13 +34,12 @@ app.use("/stock", productsRoutes);
 app.use("/shelf", shelfRoutes);
 app.use("/transfer", transferRoutes);
 
-const credentials = {
-	user: "root",
-	password: "vAECqPQIanQb5qOj",
-	db: "cluster0.8bf5t",
-};
+app.use((err, req, res, prox) => {
+	res.status(400).send(err);
+});
 
-app.listen(4000);
+app.listen(4000, () => console.log("API RUNNING PORT 4000"));
+
 // mongoose
 // 	.connect(
 // 		`mongodb+srv://${credentials.user}:${credentials.password}@${credentials.db}.mongodb.net/RCA?retryWrites=true&w=majority`,
