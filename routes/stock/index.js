@@ -2,9 +2,6 @@ const router = require("express").Router();
 const { sendMessage } = require("../../services/rabbit");
 
 router.post("/", async (req, res) => {
-	const { name, id, batch, manufacturingDate, expiringDate, origin, amount } =
-		req.body;
-
 	try {
 		sendMessage(req.baseUrl, "POST", req.body, req.params, req.query, res);
 	} catch (error) {
@@ -23,8 +20,6 @@ router.get("/", async (req, res) => {
 
 // Read
 router.get("/:id", async (req, res) => {
-	const id = req.params.id;
-
 	try {
 		sendMessage(req.baseUrl, "GET", req.body, req.params, req.query, res);
 	} catch (error) {
@@ -44,8 +39,6 @@ router.put("/:id", async (req, res) => {
 
 // Delete
 router.delete("/:id", async (req, res) => {
-	const id = req.params.id;
-
 	try {
 		sendMessage(req.baseUrl, "DELETE", req.body, req.params, req.query, res);
 	} catch (error) {

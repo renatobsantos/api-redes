@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const transferTable = require("./table");
 const { sendMessage } = require("../../services/rabbit");
 
 router.get("/", async (req, res) => {

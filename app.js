@@ -39,14 +39,3 @@ app.use((err, req, res, prox) => {
 });
 
 app.listen(4000, () => console.log("API RUNNING PORT 4000"));
-
-// mongoose
-// 	.connect(
-// 		`mongodb+srv://${credentials.user}:${credentials.password}@${credentials.db}.mongodb.net/RCA?retryWrites=true&w=majority`,
-// 	)
-// 	.then(() => {
-// 		console.log("Conectou ao banco!");
-// 	})
-// 	.catch((err) => console.log(err));
-
-//s8q66edB33B1AGIi
