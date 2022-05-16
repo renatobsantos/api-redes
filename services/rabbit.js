@@ -21,7 +21,13 @@ const sendMessage = (endpoint, method, body, params, query, res) => {
 					query: query,
 				};
 				channel.assertQueue(queue, { durable: false });
-				channel.consume(queue, (msg) => {
+				const jsonMessage = JSON.stringify(msgContent);
+				channel.sendToQueue(queue, Buffer.from(jsonMessage), {
+					replyTo: queue,
+					correlationId: corrId,
+				});
+				channel.assertQueue("reply_api", { durable: false });
+				channel.consume("reply_api", (msg) => {
 					if (corrId === msg.properties.correlationId) {
 						const response = JSON.parse(msg.content);
 						console.log(response);
@@ -29,13 +35,8 @@ const sendMessage = (endpoint, method, body, params, query, res) => {
 						resolve(response);
 						setTimeout(() => {
 							connection.close();
-						}, 500);
+						}, 1500);
 					}
-				});
-				const jsonMessage = JSON.stringify(msgContent);
-				channel.sendToQueue(queue, Buffer.from(jsonMessage), {
-					replyTo: queue,
-					correlationId: corrId,
 				});
 				console.log(" [x] Sent %s", msgContent);
 			});
